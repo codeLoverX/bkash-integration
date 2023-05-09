@@ -20,7 +20,7 @@ export default function PaymentMd() {
         <div className={styles.modal}>
             <div className="w-[25.813rem] shadow-md bg-white rounded-xl p-9 space-y-12">
                 <div className="flex justify-end mb-6">
-                    <SVGIcon Icon={Cancel} onClick={toggleModal} />
+                    <SVGIcon Icon={Cancel} onClick={()=> toggleModal()} />
                 </div>
                 <SVGIcon Icon={DeliveryBx2} className="w-20 h-20" />
                 <div className="text-textColor">

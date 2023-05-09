@@ -24,8 +24,8 @@ export default function Order() {
                             <td className="pt-5 pb-2 text-base font-semibold text-black">Product</td>
                             <td className="pt-5 pb-2 text-base font-semibold text-black text-right">Subtotal</td>
                         </tr>
-                        {CartProducts.map((product) => <TbRow key={product.id} label={product.product}>৳ {product.price} TK </TbRow>)}
-                        <TbRow label="Subtotal"><p className="text-black">৳ {total}TK </p></TbRow>
+                        {CartProducts.map((product) => <TbRow keyName={product.id} label={product.product}>৳ {product.price} TK </TbRow>)}
+                        <TbRow keyName={"no key"} label="Subtotal"><p className="text-black">৳ {total}TK </p></TbRow>
                     </tbody>
                 </table>
                 <p className="py-5 text-pColor">Shipping</p>

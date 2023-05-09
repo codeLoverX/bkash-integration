@@ -6,7 +6,7 @@ const useGlobal = () => {
   const [mbCode, setMbCode] = useState(countryCode[15]);
   const [bkashURL, setBkashURL] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
-  const toggleModal = () => setOpen((prev) => !prev);
+  const toggleModal = (value) => setOpen(value) ;
   const getPayment = (body) => {
     axios.post(`${process.env.REACT_APP_SERVER_URL}/bkash/createPayment`, { ...body, totalPrice })
       .then((data) => {

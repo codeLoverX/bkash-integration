@@ -9,12 +9,19 @@ export default function CheckoutPage() {
     const { toggleModal } = useGlobalCtx();
 
     useEffect(() => {
-        console.log({searchParams})
-        if (searchParams.get("status") === "success") {
-            toggleModal();
-        }
+    
+        if (searchParams.has("status")){
+            const status = searchParams.get("status");
+            console.log({status, equals: status === "success"})
+            if (status === "success") {
+                toggleModal(true);
+            }
+            else {
+                alert(`This is the current status of payment: ${status}`)
+            }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams.get("cancel")])
+    }, [])
     return (
         <Checkout />
     )
