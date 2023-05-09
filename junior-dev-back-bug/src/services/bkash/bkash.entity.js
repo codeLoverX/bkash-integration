@@ -26,7 +26,6 @@ export const createPayment = ({ bkash }) => async (req, res) => {
       email: req.body.email
     }); 
     if (crtPayment.statusCode === "0000" && crtPayment.statusMessage === "Successful") {
-      // console.log({ crtPayment })
       res.status(200).send(crtPayment);
     }
     else {
@@ -50,10 +49,8 @@ export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
     //   amount: req.query.amount,
     //   agreementID: execute.agreementID
     // });
-    // console.log({ crtPayment })
 
     let executePay = await bkash.executePayment({ paymentID: req.query.paymentID });
-    // console.log({ executePay })
 
     // Send a Confirmation Email
     if (executePay.statusCode === '0000') {

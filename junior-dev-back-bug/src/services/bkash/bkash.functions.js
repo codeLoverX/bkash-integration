@@ -115,7 +115,6 @@ class BaseClass {
         intent,
         merchantInvoiceNumber: merchantInvoiceNumber,
       };
-      // console.log({data})
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
       return await fetch({ method: 'POST', url, headers, data });
     } catch (error) {
@@ -127,7 +126,6 @@ class BaseClass {
     try {
       let url = this.baseUrl + '/execute';
       let data = { paymentID };
-      // console.log({ data })
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
       return await fetch({ method: 'POST', url, headers, data });
     } catch (error) {
