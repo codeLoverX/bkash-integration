@@ -58,13 +58,11 @@ class BaseClass {
       let data = {
         mode,
         payerReference,
-        // withCredentials: true,
         callbackURL: 'http://localhost:9000/api/bkash/execute/?email=' + email + '&totalPrice=' + totalPrice,
       };
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
       return await fetch({ method: 'POST', url, headers, data });
     } catch (error) {
-      console.log({error})
       throw new Error(error.message);
     }
   }
@@ -97,10 +95,6 @@ class BaseClass {
     agreementID,
     baseURL,
   }) {
-    console.log("hitttttttttttttttt")
-    console.log("hitttttttttttttttt")
-    console.log("hitttttttttttttttt")
-
     try {
       let url = this.baseUrl + '/create';
       let data = {

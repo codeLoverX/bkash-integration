@@ -17,8 +17,12 @@ export const createPayment = ({ bkash }) => async (req, res) => {
       totalPrice: req.body.totalPrice,
       mode: '0000'
     });
-    console.log(createAgreement);
-    res.status(200).send(createAgreement);
+    if (createAgreement.statusCode==="0000" && createAgreement.statusMessage==="Successful"){
+      res.status(200).send(createAgreement);
+    }
+    else{
+      res.status(400).send({error: createAgreement.statusMessage});
+    }
   } catch (error) {
     res.status(500).send('something went wrong');
   }
@@ -26,7 +30,8 @@ export const createPayment = ({ bkash }) => async (req, res) => {
 
 export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
   let email = req.query.email;
-  const execute = await bkash.executeAgreement();
+  const execute = await bkash.executeAgreement(req.body.paymentID);
+  console.log({execute, paymentID: req.body.paymentID})
   if (Number(execute.statusCode) !== 2054) {
     const crtPayment = await bkash.createPayment({
       mode: '0001', merchantAssociationInfo: 'MI05MID54RF09123456One',
@@ -35,6 +40,7 @@ export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
     });
     let createPay = await bkash.executePayment({ paymentID: crtPayment.paymentID });
     // Send a Confirmation Email
+    console.log({createPay})
     if (createPay.statusCode === '0000') {
       await mail({
         receiver: req.query.email,
@@ -43,6 +49,7 @@ export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
         type: 'html'
       });
     }
+    c
     // Redirect to webpage to show a modal
     return await res.redirect(crtPayment.bkashURL);
   }
