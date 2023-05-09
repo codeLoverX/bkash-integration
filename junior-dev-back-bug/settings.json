@@ -4,13 +4,14 @@
   "api": "http://localhost:9000",
   "origin": [
     "http://localhost:3000",
-    "http://localhost:9000"
+    "http://localhost:9000",
+    "103.108.146.90:9000"  
   ],
   "useHTTP2": false,
-  "SMTP_HOST": "",
-  "SMTP_PORT": "",
-  "SMTP_USER": "",
-  "SMTP_PASSWORD": "",
+  "SMTP_HOST": "http://localhost:9000",
+  "SMTP_PORT": "587",
+  "SMTP_USER": "username",
+  "SMTP_PASSWORD": "password",
   "mongodbURL": "mongodb+srv://coderdev:coderdev@cluster0.9xruk.mongodb.net/new",
   "bkash": {
     "username": "sandboxTokenizedUser02",
