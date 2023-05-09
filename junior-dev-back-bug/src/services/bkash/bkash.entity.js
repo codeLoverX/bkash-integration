@@ -5,30 +5,26 @@
 import fs from 'fs';
 import path from 'path';
 
-// export const createPayment = ({ bkash }) => async (_req, res) => {
-//   res.send(bkash);
-// };
 
 export const createPayment = ({ bkash }) => async (req, res) => {
   try {
-    const createAgreement = await bkash.createAgreement({
+    // const createAgreement = await bkash.createAgreement({
+    //   payerReference: req.body.phone,
+    //   email: req.body.email,
+    //   totalPrice: req.body.totalPrice,
+    // });
+    const crtPayment = await bkash.createPayment({
       payerReference: req.body.phone,
-      email: req.body.email,
-      totalPrice: req.body.totalPrice,
-      mode: '0000'
+      amount: req.body.totalPrice,
+      // agreementID: execute.agreementID,
+      email: req.body.email
     });
-    if (createAgreement.statusCode === "0000" && createAgreement.statusMessage === "Successful") {
-      // const execute = await bkash.executeAgreement(
-      //   {
-      //     payerReference: req.body.phone,
-      //     paymentID: createAgreement.paymentID
-      //   });
-      // console.log({ execute, paymentID: createAgreement.paymentID })
-      console.log({ createAgreement })
-      res.status(200).send(createAgreement);
+    if (crtPayment.statusCode === "0000" && crtPayment.statusMessage === "Successful") {
+      console.log({ crtPayment })
+      res.status(200).send(crtPayment);
     }
     else {
-      res.status(400).send({ error: createAgreement.statusMessage });
+      res.status(400).send({ error: crtPayment.statusMessage });
     }
   } catch (error) {
     res.status(500).send('something went wrong');
@@ -38,24 +34,19 @@ export const createPayment = ({ bkash }) => async (req, res) => {
 
 export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
   // let email = req.query.email;
-  const execute = await bkash.executeAgreement(
-    {
-      paymentID: req.query.paymentID
-    });
-  if (Number(execute.statusCode) !== 2054) {
-    const crtPayment = await bkash.createPayment({
-      payerReference: req.query.payerReference,
-      callbackURL: config.base + '/?email=' + req.query.email,
-      merchantAssociationInfo: "MI05MID54RF09123456One",
-      amount: req.query.amount,
-      currency: "BDT",
-      intent: "sale",
-      merchantInvoiceNumber: "Inv0124",
-      // merchantInvoiceNumber: 'Inv0121', 
-    });
-    console.log({ crtPayment })
+  // const execute = await bkash.executeAgreement(
+  //   {
+  //     paymentID: req.query.paymentID
+  //   });
+  // if (Number(execute.statusCode) !== 2054) {
+    // const crtPayment = await bkash.createPayment({
+    //   payerReference: req.query.payerReference,
+    //   amount: req.query.amount,
+    //   agreementID: execute.agreementID
+    // });
+    // console.log({ crtPayment })
 
-    let executePay = await bkash.executePayment({ paymentID: crtPayment.paymentID });
+    let executePay = await bkash.executePayment({ paymentID: req.query.paymentID });
     console.log({ executePay })
 
     // Send a Confirmation Email
@@ -66,15 +57,17 @@ export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
         body: fs.readFileSync(path.resolve(__dirname, 'templates', 'emailTemplate.html')),
         type: 'html'
       });
+      const url = 'http://localhost:9000/api/bkash/status/?email=' + req.query.email;
+      return await res.redirect(url);
     }
-    return await res.redirect(crtPayment.bkashURL);
-  }
-  await res.redirect(config.base+ '/?status=' + req.query.status);
+    // return await res.redirect(crtPayment.bkashURL);
+  // }
+  await res.redirect(config.base + '/?buy=fail');
 
 };
 
 export const status = ({ config }) => async (req, res) => {
   let email = req.query.email;
-  res.redirect(config.base + '?buy=success?email=' + email);
+  res.redirect(config.base + '?buy=success&email=' + email);
 };
 

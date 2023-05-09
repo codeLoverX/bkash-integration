@@ -10,8 +10,8 @@ export default function CheckoutPage() {
 
     useEffect(() => {
     
-        if (searchParams.has("status")){
-            const status = searchParams.get("status");
+        if (searchParams.has("buy")){
+            const status = searchParams.get("buy");
             console.log({status, equals: status === "success"})
             if (status === "success") {
                 toggleModal(true);

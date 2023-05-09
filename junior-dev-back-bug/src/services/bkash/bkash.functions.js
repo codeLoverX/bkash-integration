@@ -60,7 +60,7 @@ class BaseClass {
         mode,
         payerReference,
         callbackURL: 'http://localhost:9000/api/bkash/execute/?email=' + email + '&amount=' + totalPrice
-        + '&payerReference' + payerReference,
+          + '&payerReference=' + payerReference,
       };
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
       return await fetch({ method: 'POST', url, headers, data });
@@ -93,25 +93,29 @@ class BaseClass {
   async createPayment({
     mode = "0011",
     amount,
-    payerReference,
-    callbackURL,
     merchantAssociationInfo = "MI05MID54RF09123456One",
     currency = "BDT",
     intent = "sale",
     merchantInvoiceNumber = "Inv0124",
+    agreementID,
+    payerReference,
+    email,
   }) {
     try {
       let url = this.baseUrl + '/create';
       let data = {
         mode,
         payerReference,
-        callbackURL,
+        callbackURL: 'http://localhost:9000/api/bkash/execute/?email=' + email + '&amount=' + amount
+          + '&payerReference=' + payerReference,
         merchantAssociationInfo,
         amount,
         currency,
+        agreementID,
         intent,
         merchantInvoiceNumber: merchantInvoiceNumber,
       };
+      console.log({data})
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
       return await fetch({ method: 'POST', url, headers, data });
     } catch (error) {
@@ -123,7 +127,7 @@ class BaseClass {
     try {
       let url = this.baseUrl + '/execute';
       let data = { paymentID };
-      console.log({data})
+      console.log({ data })
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
       return await fetch({ method: 'POST', url, headers, data });
     } catch (error) {
