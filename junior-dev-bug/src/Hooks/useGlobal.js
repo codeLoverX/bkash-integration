@@ -10,7 +10,7 @@ const useGlobal = () => {
   const getPayment = (body) => {
     axios.post(`${process.env.REACT_APP_SERVER_URL}/bkash/createPayment`, { ...body, totalPrice })
       .then((data) => {
-        console.log({data})
+        // console.log({data})
         const bkashURL = data.data.bkashURL
         window.open(bkashURL, "_self");
       })
