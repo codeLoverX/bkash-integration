@@ -17,7 +17,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm run build && react-scripts start",
     "build": "BUILD_PATH='../junior-dev-back-bug/client' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
