@@ -13,7 +13,6 @@ class BaseClass {
     this.password = password;
     this.appKey = appKey;
     this.appSecret = appSecret;
-    console.log({ appKey, appSecret })
     this.baseUrl = isDev ? this.sandbox : this.live;
   }
 
@@ -69,12 +68,12 @@ class BaseClass {
     }
   }
 
-  async executeAgreement({ paymentID = '', payerReference = '' }) {
-    console.log({ paymentID, payerReference })
+  async executeAgreement({ paymentID = '' }) {
+    console.log({ paymentID })
     try {
       let url = this.baseUrl + '/execute';
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
-      return await fetch({ method: 'POST', url, headers, data: { paymentID, payerReference } });
+      return await fetch({ method: 'POST', url, headers, data: { paymentID } });
     } catch (error) {
       throw new Error(error.message);
     }
@@ -91,29 +90,28 @@ class BaseClass {
   }
 
   async createPayment({
-    mode = "0011",
+    mode,
     amount,
-    merchantAssociationInfo = "MI05MID54RF09123456One",
-    currency = "BDT",
-    intent = "sale",
-    merchantInvoiceNumber = "Inv0124",
+    merchantAssociationInfo,
+    currency,
+    intent ,
+    merchantInvoiceNumber ,
     agreementID,
     payerReference,
-    email,
+    callbackURL
   }) {
     try {
       let url = this.baseUrl + '/create';
       let data = {
         mode,
         payerReference,
-        callbackURL: 'http://localhost:9000/api/bkash/execute/?email=' + email + '&amount=' + amount
-          + '&payerReference=' + payerReference,
         merchantAssociationInfo,
         amount,
         currency,
         agreementID,
         intent,
-        merchantInvoiceNumber: merchantInvoiceNumber,
+        merchantInvoiceNumber,
+        callbackURL
       };
       let headers = { Authorization: this.token, 'X-APP-Key': this.appKey };
       return await fetch({ method: 'POST', url, headers, data });
