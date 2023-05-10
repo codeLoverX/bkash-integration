@@ -14,8 +14,8 @@ export default function NewMailer(options) {
     var mailObject = {
       to: receiver,
       from: {
-        name: '',//add name
-        address: ''//add address
+        name: 'Ridwan Bin Monjur',//add name
+        address: 'mjrrdn@gmail.com'//add address
       },
       subject,
     };

@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 
 
-export const createPayment = ({ bkash }) => async (req, res) => {
+export const createPayment = ({ bkash, mail }) => async (req, res) => {
   try {
     const createAgreement = await bkash.createAgreement({
       // moved the other parameters into the bkash.createAgreement as DEFAULT ARGUMENTS 
@@ -29,7 +29,7 @@ export const createPayment = ({ bkash }) => async (req, res) => {
 };
 
 
-export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
+export const executePayment = ({ bkash, config }) => async (req, res) => {
   const executeAgreement = await bkash.executeAgreement(
     {
       paymentID: req.query.paymentID
@@ -37,7 +37,7 @@ export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
   // console.log({executeAgreement})
   if (Number(executeAgreement.statusCode) !== 2054) {
     const crtPayment = await bkash.createPayment({
-          payerReference: req.query.payerReference,
+      payerReference: req.query.payerReference,
       amount: req.query.amount,
       agreementID: executeAgreement.agreementID,
       callbackURL: 'http://localhost:9000/api/bkash/status/?email=' + req.query.email,
@@ -49,26 +49,29 @@ export const executePayment = ({ bkash, mail, config }) => async (req, res) => {
     });
     // console.log({crtPayment})
 
-    let executePay = await bkash.executePayment({ paymentID: req.query.paymentID });
-    // console.log({executePay})
-
-    // Send a Confirmation Email
-    if (executePay.statusCode === '0000') {
-      await mail({
-        receiver: req.query.email,
-        subject: 'Coding test',
-        body: fs.readFileSync(path.resolve(__dirname, 'templates', 'emailTemplate.html')),
-        type: 'html'
-      });
-    }
     return await res.redirect(crtPayment.bkashURL);
   }
-  await res.redirect(config.base + '/?buy=fail');
+  else await res.redirect(config.api + '/?buy=fail');
 
 };
 
-export const status = ({ config }) => async (req, res) => {
-  let email = req.query.email;
-  res.redirect(config.base + '?buy=success&email=' + email);
+export const status = ({ bkash, mail, config }) => async (req, res) => {
+
+  let executePay = await bkash.executePayment({ paymentID: req.query.paymentID });
+  console.log({ executePay })
+
+  // Send a Confirmation Email
+  if (executePay.statusCode === '0000') {
+    const mail2 = await mail({
+      receiver: req.query.email,
+      subject: 'Coding test from mjrrdnasm@gmail.com',
+      body: fs.readFileSync(path.resolve(__dirname, 'templates', 'emailTemplate.html')),
+      type: 'html'
+    });
+    console.log({ mail2 });
+    let email = req.query.email;
+    res.redirect(config.api + '?buy=success&email=' + email);
+  }
+  else await res.redirect(config.api + '/?buy=fail');
 };
 

@@ -8,10 +8,10 @@
     "103.108.146.90:9000"  
   ],
   "useHTTP2": false,
-  "SMTP_HOST": "http://localhost:9000",
+  "SMTP_HOST": "smtp.gmail.com",
   "SMTP_PORT": "587",
-  "SMTP_USER": "username",
-  "SMTP_PASSWORD": "password",
+  "SMTP_USER": "mjrrdn@gmail.com",
+  "SMTP_PASSWORD": "geqnzuvadxgnrmpr",
   "mongodbURL": "mongodb+srv://coderdev:coderdev@cluster0.9xruk.mongodb.net/new",
   "bkash": {
     "username": "sandboxTokenizedUser02",
